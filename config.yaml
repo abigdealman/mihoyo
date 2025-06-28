@@ -1,4 +1,4 @@
-# ------------------- 请复制这里开始 (手动固定节点+订阅备用 最终版) -------------------
+# ------------------- 全新标准配置 -------------------
 port: 7890
 socks-port: 7891
 redir-port: 7893
@@ -6,20 +6,20 @@ allow-lan: true
 bind-address: '*'
 log-level: info
 external-controller: '0.0.0.0:9090'
-secret: '20050102.' # 如果您改过密码，请用您自己的
+secret: '20050102.'
 
-# 新增部分：在这里手动定义我们的首选节点
+# 手动定义首选节点
 proxies:
-  - name: "美国D1-手动"  # 我们给它起个新名字，方便识别
-    type: trojan        # 协议类型
-    server: cmgd.ecydns.com  # 连接地址
-    port: 10037         # 连接端口
-    password: f4427bae-817a-34e4-aae0-9cc3a44427fb # 连接密码
-    tls: true           # 开启TLS
-    udp: true           # 建议开启UDP转发
-    sni: usd.ecydns.com # 重要的SNI字段
+  - name: "美国D1-手动"
+    type: trojan
+    server: cmgd.ecydns.com
+    port: 10037
+    password: f4427bae-817a-34e4-aae0-9cc3a44427fb
+    tls: true
+    udp: true
+    sni: usd.ecydns.com
 
-# 订阅链接部分保持不变
+# 订阅链接
 proxy-providers:
   airport:
     type: http
@@ -31,9 +31,8 @@ proxy-providers:
       interval: 600
       url: http://www.gstatic.com/generate_204
 
-# 代理组部分进行优化
+# 代理组
 proxy-groups:
-  # 备用组：自动从订阅里选择最快的节点
   - name: "自动选择"
     type: url-test
     use:
@@ -41,37 +40,13 @@ proxy-groups:
     url: 'http://www.gstatic.com/generate_204'
     interval: 300
 
-  # 主策略组：您的服务真正使用的组
   - name: "PROXY"
     type: select
     proxies:
-      # 首选：我们上面手动定义的那个美国节点
       - "美国D1-手动"
-      
-      # 备用：当手动节点失效时，自动切换到“自动选择”组
       - "自动选择"
 
-# 规则部分保持不变
+# 规则
 rules:
   - MATCH,PROXY
-
-# --- 【【【 新增的 DNS 配置 】】】 ---
-dns:
-  enable: true
-  listen: 0.0.0.0:1053  # 在 1053 端口上监听 DNS 请求
-  enhanced-mode: redir-host # 关键模式，用于透明代理
-  default-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-  nameserver:
-    - https://doh.pub/dns-query # 使用 DoH 防止污染
-    - https://dns.alidns.com/dns-query
-  fallback:
-    - https://1.1.1.1/dns-query
-    - 8.8.8.8
-  fallback-filter:
-    geoip: true
-    ipcidr:
-      - 240.0.0.0/4
-# -------------------------------------
-# ------------------- 请复制这里结束 -------------------
+# ------------------- 配置结束 -------------------
