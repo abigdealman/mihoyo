@@ -53,4 +53,24 @@ proxy-groups:
 # 规则部分保持不变
 rules:
   - MATCH,PROXY
+
+# --- 【【【 新增的 DNS 配置 】】】 ---
+dns:
+  enable: true
+  listen: 0.0.0.0:1053  # 在 1053 端口上监听 DNS 请求
+  enhanced-mode: redir-host # 关键模式，用于透明代理
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://doh.pub/dns-query # 使用 DoH 防止污染
+    - https://dns.alidns.com/dns-query
+  fallback:
+    - https://1.1.1.1/dns-query
+    - 8.8.8.8
+  fallback-filter:
+    geoip: true
+    ipcidr:
+      - 240.0.0.0/4
+# -------------------------------------
 # ------------------- 请复制这里结束 -------------------
