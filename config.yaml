@@ -50,3 +50,32 @@ proxy-groups:
 rules:
   - MATCH,PROXY
 # ------------------- 配置结束 -------------------
+# ------------------- DNS 配置开始 -------------------
+dns:
+  enable: true
+  listen: 0.0.0.0:5353
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  
+  # 国内域名使用的DNS (快速、可靠)
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+  # 国外域名使用的DNS (防污染)
+  nameserver:
+    - https://dns.google/dns-query # Google DNS over HTTPS
+    - tls://1.1.1.1 # Cloudflare DNS over TLS
+
+  # nameserver 解析失败时的备用DNS
+  fallback:
+    - tls://8.8.4.4
+    - https://doh.pub/dns-query
+
+  # 规则: 匹配 geosite:cn 列表的域名，使用 default-nameserver 解析
+  # 其他所有域名，默认使用 nameserver 解析
+  nameserver-policy:
+    'geosite:cn':
+      - default-nameserver
+# ------------------- DNS 配置结束 -------------------
