@@ -1,0 +1,16 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      # 覆盖 DHCP 的设置
+      dhcp4-overrides:
+        use-dns: false  # 告诉系统不要使用 DHCP 提供的 DNS
+      
+      # 手动指定 DNS 服务器为 mihomo
+      nameservers:
+        addresses: [127.0.0.1]
+      
+      match:
+        macaddress: 52:54:00:29:2e:6e
+      set-name: eth0
